@@ -1,33 +1,43 @@
-{
-  "name": "Python 3",
-  // Or use a Dockerfile or Docker Compose file. More info: https://containers.dev/guide/dockerfile
-  "image": "mcr.microsoft.com/devcontainers/python:1-3.11-bookworm",
-  "customizations": {
-    "codespaces": {
-      "openFiles": [
-        "README.md",
-        "app.py"
-      ]
-    },
-    "vscode": {
-      "settings": {},
-      "extensions": [
-        "ms-python.python",
-        "ms-python.vscode-pylance"
-      ]
+import streamlit as st
+import os
+
+# 1. SETUP
+st.set_page_config(page_title="Vixx Energy Flow", page_icon="💜")
+
+# 2. VIOLET & GREEN THEME
+st.markdown("""
+    <style>
+    .stApp { background-color: #F0F9F6 !important; }
+    h1, h2, h3 { color: #6D28D9 !important; text-align: center; }
+    .stButton>button {
+        background-color: #7C3AED !important;
+        color: white !important;
+        border-radius: 30px !important;
+        width: 100%;
     }
-  },
-  "updateContentCommand": "[ -f packages.txt ] && sudo apt update && sudo apt upgrade -y && sudo xargs apt install -y <packages.txt; [ -f requirements.txt ] && pip3 install --user -r requirements.txt; pip3 install --user streamlit; echo '✅ Packages installed and Requirements met'",
-  "postAttachCommand": {
-    "server": "streamlit run app.py --server.enableCORS false --server.enableXsrfProtection false"
-  },
-  "portsAttributes": {
-    "8501": {
-      "label": "Application",
-      "onAutoForward": "openPreview"
-    }
-  },
-  "forwardPorts": [
-    8501
-  ]
-}
+    </style>
+    """, unsafe_allow_html=True)
+
+# 3. AUTOMATIC LOGO FINDER
+# This looks for any image you uploaded and displays it at the top
+files = os.listdir('.')
+image_files = [f for f in files if f.lower().endswith(('.png', '.jpg', '.jpeg')) and f != 'app.py']
+
+if image_files:
+    # Use the first image found as the logo
+    st.image(image_files[0], use_container_width=True)
+else:
+    st.markdown("<h1 style='text-align: center;'>🧘‍♀️</h1>", unsafe_allow_html=True)
+
+st.title("Vixx Energy Flow")
+
+# 4. ABOUT & CONTENT
+with st.expander("ℹ️ About the Sanctuary"):
+    st.write("Welcome to your space for Reiki and alignment.")
+
+st.subheader("✨ Today's Alignment")
+chakra = st.selectbox("Focus on:", ["Root", "Sacral", "Solar Plexus", "Heart", "Throat", "Third Eye", "Crown"])
+
+if st.button("Activate My Spark"):
+    st.snow()
+    st.success(f"Focusing on your {chakra} energy...")
